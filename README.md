@@ -532,6 +532,17 @@ be used with caution and tested carefully on larger installations before moving
 to production. In any case, you are free to implement your own backup scenario
 outside of this role.
 
+### Configure only option
+
+If you only want to configure an existing Nexus then this can be done by setting 
+
+```yaml
+      nexus_install: false
+```
+
+This will skip the download and install elements and use the configuration (e.g. ports and context path) to configure an existing nexus.
+This can be used when, say, the nexus is run as part of a docker compose configuration. (Option `nexus_timezone` not currently supported in this mode.) Care must be taken to allow access to the `nexus_data_dir`.
+
 
 ## Dependencies
 

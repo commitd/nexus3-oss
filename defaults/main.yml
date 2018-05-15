@@ -11,6 +11,8 @@ nexus_timezone: 'UTC'  # java timezone
 nexus_tmp_dir: '/tmp/nexus'
 nexus_script_dir: '{{ nexus_installation_dir }}/nexus-{{ nexus_version }}/etc/scripts'
 
+# Nexus Install - set false to assume already installed
+nexus_install: true
 
 # Nexus Backup
 nexus_backup_dir: '/var/nexus-backup'

@@ -1,0 +1,25 @@
+---   
+- name: Get rest API endpoint (v < 3.8.0)
+  set_fact:
+    nexus_rest_api_endpoint: "service/siesta/rest/v1/script"
+  when: nexus_version is version_compare('3.8.0', '<')
+
+- name: Get rest API endpoint (v >= 3.8.0)
+  set_fact:
+    nexus_rest_api_endpoint: "service/rest/v1/script"
+  when: nexus_version is version_compare('3.8.0', '>=')
+
+- name: Create Nexus data directory
+  file:
+    path: "{{ nexus_data_dir }}"
+    state: "directory"
+    owner: "{{ nexus_os_user }}"
+    group: "{{ nexus_os_group }}"
+
+
+- name: 'Check if data directory is empty (first-time install)'
+  command: "ls {{ nexus_data_dir }}"
+  register: nexus_data_dir_contents
+  check_mode: no
+  changed_when: false
+

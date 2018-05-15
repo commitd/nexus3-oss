@@ -7,18 +7,26 @@
   include: "selinux-{{ ansible_os_family }}.yml"
   when: ansible_selinux.status is defined and ansible_selinux.status == "enabled"
 
-- name: Check if SystemD service is installed
-  stat:
-    path: /etc/systemd/system/nexus.service
-  register: nexus_systemd_service_file
+- include: nexus_user.yml
 
-- include: nexus_purge.yml
-  when: ((purge is defined) and (purge | bool))
+- include: nexus_setup.yml
 
-- include: nexus_install.yml
+- block:
+    - name: Check if SystemD service is installed
+      stat:
+        path: /etc/systemd/system/nexus.service
+      register: nexus_systemd_service_file
 
-- include: httpd_reverse_proxy_config.yml
-  when: httpd_setup_enable
+    - include: nexus_purge.yml
+      when: ((purge is defined) and (purge | bool))
+
+    - include: nexus_install.yml
+
+    - include: httpd_reverse_proxy_config.yml
+      when: httpd_setup_enable
+  when: nexus_install
+
+- include: nexus_configure.yml
 
 - include: admin_password_setup.yml
 
